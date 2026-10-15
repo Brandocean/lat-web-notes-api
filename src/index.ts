@@ -2,12 +2,14 @@ import express from 'express';
 import mongoose from 'mongoose';
 import noteRoutes from './routes/notes.js';
 import { errorHandler, notFoundHandler } from './middleware/error.js';
+import authRoutes from './routes/auth.js';
 
 const app = express();
 const PORT = 3000;
 
 app.use(express.json());
 app.use(noteRoutes);
+app.use(authRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
