@@ -87,9 +87,31 @@ export const login = async (req: Request, res: Response) => {
 };
 
 export const getProfile = async (req: Request, res: Response) => {
-  res.status(501).json({
-    success: false,
-    data: null,
-    error: { message: 'Todavía no implementado' },
+  const userId = req.user?.userId;
+
+  if (!userId) {
+    res.status(401).json({
+      success: false,
+      data: null,
+      error: { message: 'No autorizado' },
+    });
+    return;
+  }
+
+  const user = await User.findById(userId).select('-password');
+
+  if (!user) {
+    res.status(404).json({
+      success: false,
+      data: null,
+      error: { message: 'No se encontró el usuario' },
+    });
+    return;
+  }
+
+  res.status(200).json({
+    success: true,
+    data: { user },
+    error: null,
   });
 };
